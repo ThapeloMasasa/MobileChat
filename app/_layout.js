@@ -1,8 +1,9 @@
 import { View, Text } from 'react-native'
-import React from 'react'
-import { Slot, useRouter } from 'expo-router'
+
+import { Slot, useRouter,useSegments  } from 'expo-router'
 import "../global.css"
-import { AuthContext, useAuth } from '../context/authContext'
+import { AuthContextProvider, useAuth} from '../context/authContext'
+import React, { useEffect } from 'react'
 
 
 const MainLayout = ()=>{
@@ -19,7 +20,7 @@ const MainLayout = ()=>{
         if(isAuthenticated && !inApp){
             router.replace('home')
         }else if (isAuthenticated == false){
-            router.replace('signIn')
+            router.replace('signin')
         }   
     },[isAuthenticated])
 
