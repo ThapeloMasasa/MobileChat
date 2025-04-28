@@ -1,11 +1,11 @@
-import { View, Text } from 'react-native'
+import { View, ActivityIndicator } from 'react-native'
 import React from 'react'
 
 
-export default function index() {
+export default function startPage() {
   return (
-    <View className="bg-red-200 pt-20">
-      <Text className="text-3xl text-center">Masasa</Text>
+    <View className="flex-1 justify-center">
+      <ActivityIndicator size="large" color="gray" />
     </View>
   )
 }
