@@ -21,11 +21,15 @@ export default function SignUp() {
         setLoading(true);
     }
   return (
-    <View className="flex-1">
+    <keyBoardView >
       <StatusBar  style="dark"/>
       <View style ={{paddingTop: hp(7), paddingHorizontal:(wp(5))}} className="flex-1 gap-12">
         <View className="items-center">
-            <Image style={{height: hp(25)}} resizeMode='contain' source={require('../assets/images/loginIMG.png')} />
+            <Image style={{height: hp(25),
+                    width: hp(25), // Ensures a square aspect ratio
+                    borderRadius: hp(10), // Adjust as needed for curvature
+                    overflow: 'hidden',
+                    backgroundColor: 'white', }} resizeMode='contain' source={require('../assets/images/loginIMG.png')} />
         </View>
         <View className= "gap-10">
             <Text style={{fontSize: hp(4)}} className="font-bold tracking-wider text-center text-neutral-800">
@@ -111,6 +115,6 @@ export default function SignUp() {
             </View>
         </View>
       </View>
-    </View>
+      </keyBoardView>
   )
 }
