@@ -1,11 +1,14 @@
 import { View, Text , Image,TextInput, TouchableOpacity, Pressable, Alert,ActivityIndicator } from 'react-native'
 import React, { useRef, useState } from 'react'
+import CustomKeyBoardView from '../components/CustomKeyboardView';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { StatusBar } from 'expo-status-bar'
 import { Octicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { useAuth } from '../context/authContext';
 export default function SignUp() {
 
+    const {register} = useAuth();
     const router = useRouter();
     const passwordRef = useRef("");
     const userNameRef = useRef("");
@@ -14,14 +17,20 @@ export default function SignUp() {
     const [loading, setLoading] = useState(false);
 
     const handleRegister = async ()=>{
-        if(!emailRef.current || !passwordRef.current || !userNameRef.current || !passwordConfirmRef){
+        if(!emailRef.current || !passwordRef.current || !userNameRef.current || !passwordConfirmRef.current){
             Alert.alert("All fields are required Please fill all of them");
             return;
         }
+        if (passwordConfirmRef.current != passwordRef.current){
+            Alert.alert("Passwords did not match try again");
+            return;
+        }
         setLoading(true);
+
+        let response = await register(emailRef.current, passwordRef.current, userNameRef.current )
     }
   return (
-    <keyBoardView >
+    <CustomKeyBoardView>
       <StatusBar  style="dark"/>
       <View style ={{paddingTop: hp(7), paddingHorizontal:(wp(5))}} className="flex-1 gap-12">
         <View className="items-center">
@@ -49,7 +58,7 @@ export default function SignUp() {
                 <View style={{height:hp(7)}} className="flex-row gap-4 px-4 bg-neutral-100 items-center rounded-2xl ">
                     <Octicons name="person" size={hp(2.7)} color="gray"/>
                     <TextInput 
-                        onChangeText={value=>emailRef.current=value}
+                        onChangeText={value=>userNameRef.current=value}
                         style={{fontSize: hp(2)}}
                         className="flex-1 font-semibold text-neutral-700"
                         placeholder="User Name"
@@ -72,7 +81,7 @@ export default function SignUp() {
                 <View style={{height:hp(7)}} className="flex-row gap-4 px-4 bg-neutral-100 items-center rounded-2xl ">
                     <Octicons name="lock" size={hp(2.7)} color="gray"/>
                     <TextInput 
-                                onChangeText={value => passwordRef.current= value}
+                                onChangeText={value => passwordConfirmRef.current= value}
                                 style={{ fontSize: hp(2) }}
                                 className="flex-1 font-semibold text-neutral-700"
                                 placeholder="Confirm Password"
@@ -115,6 +124,6 @@ export default function SignUp() {
             </View>
         </View>
       </View>
-      </keyBoardView>
+      </CustomKeyBoardView>
   )
 }

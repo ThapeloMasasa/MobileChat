@@ -1,4 +1,8 @@
 import { createContext, useContext, useEffect, useState} from 'react'
+import {onAuthStateChanged,createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
+import { auth } from '../firebaseConfig';
+import { addDoc, getDoc, setDoc, doc} from 'firebase/firestore';
+
 
 export const AuthContext = createContext();
 export const AuthContextProvider = ({children})=> {
@@ -6,10 +10,16 @@ export const AuthContextProvider = ({children})=> {
     const [isAuthenticated, setIsAuthenticated] = useState(undefined);
 
     useEffect(()=>{
-
-        setTimeout(()=>{
-            setIsAuthenticated(false);
-        },3000)
+        const unsub = onAuthStateChanged(auth, user=>{
+            if (user){
+                setIsAuthenticated(true);
+                setUser(user);
+            }else{
+                setIsAuthenticated(false);
+                setUser(null);
+            }
+            return unsub;
+        })
 
     },[])
 
@@ -28,12 +38,19 @@ export const AuthContextProvider = ({children})=> {
 
         }
     }
-    const register = async (email, password, username, profileUrl)=>{
+    const register = async (email, password, username)=>{
 
         try{
+            const response = await createUserWithEmailAndPassword(auth, email, password)
+
+            await setDoc(doc(db, "users", response?.user?.uid),{
+                username,
+                userId: response?.user?.uid
+            });
+            return {success:true, data: response?.user};
 
         }catch(e){
-
+            return {success:false, data: e.message};
         }
         
     }
