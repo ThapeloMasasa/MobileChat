@@ -4,12 +4,15 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { StatusBar } from 'expo-status-bar'
 import { Octicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { useAuth } from '../context/authContext';
+import CustomKeyBoardView from '../components/CustomKeyboardView';
 export default function SignIn() {
 
     const router = useRouter();
     const passwordRef = useRef("");
     const emailRef = useRef("");
     const [loading, setLoading] = useState(false)
+    const {login} = useAuth();
 
     const handleLogin = async ()=>{
         if(!emailRef.current || !passwordRef.current){
@@ -17,9 +20,20 @@ export default function SignIn() {
             return;
         }
         setLoading(true);
+        const response = await login(emailRef.current, passwordRef.current);
+       
+        setLoading(false);
+
+        if (!response.success){
+            let msg = response.msg
+            if (msg.includes('auth/invalid-credential')) msg = "Wrong Credentials, Try Again";
+            if (msg.includes('auth/invalid-email')) msg = "Wrong email format";
+            Alert.alert(msg);
+        }
+
     }
   return (
-    <View className="flex-1">
+    <CustomKeyBoardView>
       <StatusBar  style="dark"/>
       <View style ={{paddingTop: hp(8), paddingHorizontal:(wp(5))}} className="flex-1 gap-12">
         <View className="items-center">
@@ -88,6 +102,6 @@ export default function SignIn() {
             </View>
         </View>
       </View>
-    </View>
+      </CustomKeyBoardView>
   )
 }

@@ -15,6 +15,7 @@ export const AuthContextProvider = ({children})=> {
             if (user){
                 setIsAuthenticated(true);
                 setUser(user);
+                updateUserData(user.uid);
             }else{
                 setIsAuthenticated(false);
                 setUser(null);
@@ -24,11 +25,27 @@ export const AuthContextProvider = ({children})=> {
 
     },[])
 
+    const updateUserData = async (userId)=>{
+
+        const docRef = doc(db,'users', userId);
+        const docSnap = getDoc(docRef);
+
+        if((await docSnap).exists()){
+            let data = docSnap.data();
+            setUser({...user, username:data.username, userId: data.userId})
+        }
+
+    }
+
     const login = async (email, password)=>{
         try{
-
+            const response = await signInWithEmailAndPassword(auth, email, password);
+            console.log( 'your response',response)
+            return {success: true};
         }catch(e){
-
+            let msg = e.message;
+            if (msg.includes("auth/invalid-email")) msg = "Invalid Email format";
+            return {success: false, msg}
         }
     }
 

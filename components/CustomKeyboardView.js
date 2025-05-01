@@ -6,7 +6,7 @@ export default function CustomKeyBoardView({children}) {
     const ios = Platform.OS == 'ios';
   return (
     <KeyboardAvoidingView
-       behavior={ios ? 'pading': 'height'}
+       behavior={ios ? 'padding': 'height'}
        style={{flex: 1}} >
         <ScrollView 
             style={{flex: 1}}

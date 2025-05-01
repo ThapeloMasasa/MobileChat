@@ -4,15 +4,16 @@ import { useAuth } from '../../context/authContext'
 
 export default function home() {
 
-    const {logout} = useAuth();
+    const {logout,user} = useAuth();
     const handleLogout = async()=>{
         await logout();
     }
+    console.log("user data", user)
   return (
-    <View>
+    <View className="flex-1 bg-white">
       <Text>home</Text>
       <Pressable onPress={handleLogout}>
-        <Text>Sign Out</Text>
+        <Text className="font-bold text-indigo-500 text-center">Sign Out</Text>
       </Pressable>
     </View>
   )
