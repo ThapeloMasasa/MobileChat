@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState} from 'react'
-import {onAuthStateChanged,createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
-import { auth } from '../firebaseConfig';
+import {onAuthStateChanged,createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from 'firebase/auth';
+import { auth, db } from '../firebaseConfig';
 import { addDoc, getDoc, setDoc, doc} from 'firebase/firestore';
 
 
@@ -11,6 +11,7 @@ export const AuthContextProvider = ({children})=> {
 
     useEffect(()=>{
         const unsub = onAuthStateChanged(auth, user=>{
+            console.log("log User", user)
             if (user){
                 setIsAuthenticated(true);
                 setUser(user);
@@ -33,15 +34,17 @@ export const AuthContextProvider = ({children})=> {
 
     const logout = async ()=> {
         try{
-
+            await signOut(auth);
+            return {success:true}
         }catch(e){
-
+            return {success:false, message: e.message, error: e}
         }
     }
     const register = async (email, password, username)=>{
 
         try{
             const response = await createUserWithEmailAndPassword(auth, email, password)
+            console.log('response user', response?.user)
 
             await setDoc(doc(db, "users", response?.user?.uid),{
                 username,
@@ -50,7 +53,10 @@ export const AuthContextProvider = ({children})=> {
             return {success:true, data: response?.user};
 
         }catch(e){
-            return {success:false, data: e.message};
+            let msg = e.message;
+            if (msg.includes('auth/invalid-email')) msg = 'Invalid email';
+            if (msg.includes('auth/email-already-in-use')) msg = 'Email already in use';
+            return {success:false, data: msg};
         }
         
     }

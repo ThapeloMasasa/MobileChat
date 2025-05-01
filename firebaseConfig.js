@@ -1,29 +1,29 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import {getReactNativePersistence, initializeAuth} from "firebase/auth";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import {getFireStore, collection} from 'firebase/firestore';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { initializeApp, getApps } from "firebase/app";
+import { getReactNativePersistence, initializeAuth, getAuth } from "firebase/auth";
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+import { getFirestore, collection } from "firebase/firestore";
 
-// Your web app's Firebase configuration
+
 const firebaseConfig = {
   apiKey: "AIzaSyAPwh6OlFQTqG2WCDDK5YlPWh9hwCIHRlE",
   authDomain: "mobile-chat-9b559.firebaseapp.com",
   projectId: "mobile-chat-9b559",
   storageBucket: "mobile-chat-9b559.firebasestorage.app",
   messagingSenderId: "392340888058",
-  appId: "1:392340888058:web:f237647f7fe67d37d66c43"
+  appId: "1:392340888058:web:f237647f7fe67d37d66c43",
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+// Initialize Firebase app 
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 
-export const auth = initializeApp(app, {
-    persistence: getReactNativePersistence(AsyncStorage)
-})
+// Initialize Auth
+export const auth =
+  getAuth(app) ||
+  initializeAuth(app, {
+    persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+  });
 
-export const db = getFireStore(app);
-
-export const usersRef = collection(db, 'users');
-export const roomsRef = collection(db, 'rooms');
+// Firestore setup
+export const db = getFirestore(app);
+export const usersRef = collection(db, "users");
+export const roomsRef = collection(db, "rooms");
