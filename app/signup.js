@@ -13,11 +13,12 @@ export default function SignUp() {
     const passwordRef = useRef("");
     const userNameRef = useRef("");
     const passwordConfirmRef = useRef("");
+    const profilePhotoRef = useRef("");
     const emailRef = useRef("");
     const [loading, setLoading] = useState(false);
 
     const handleRegister = async ()=>{
-        if(!emailRef.current || !passwordRef.current || !userNameRef.current || !passwordConfirmRef.current){
+        if(!emailRef.current || !passwordRef.current || !userNameRef.current || !passwordConfirmRef.current || !profilePhotoRef.current){
             Alert.alert("All fields are required Please fill all of them");
             return;
         }
@@ -27,10 +28,9 @@ export default function SignUp() {
         }
         setLoading(true);
 
-        let response = await register(emailRef.current, passwordRef.current, userNameRef.current )
+        let response = await register(emailRef.current, passwordRef.current, userNameRef.current, profilePhotoRef.current)
         setLoading(false);
 
-        console.log('got result', response)
 
         if (!response.success){
             let message = response.data
@@ -94,6 +94,18 @@ export default function SignUp() {
                                 className="flex-1 font-semibold text-neutral-700"
                                 placeholder="Confirm Password"
                                 secureTextEntry
+                                placeholderTextColor={'gray'}
+/>
+
+                </View>
+                <View style={{height:hp(7)}} className="flex-row gap-4 px-4 bg-neutral-100 items-center rounded-2xl ">
+                    <Octicons name="image" size={hp(2.7)} color="gray"/>
+                    <TextInput 
+                                onChangeText={value => profilePhotoRef.current= value}
+                                style={{ fontSize: hp(2) }}
+                                className="flex-1 font-semibold text-neutral-700"
+                                placeholder="Profile Photo URL"
+                
                                 placeholderTextColor={'gray'}
 />
 
