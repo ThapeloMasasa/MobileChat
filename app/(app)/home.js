@@ -4,7 +4,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { useAuth } from '../../context/authContext'
 import { StatusBar } from 'expo-status-bar'
 import ChatList from '../../components/ChatList';
-import { getDocs, query,where} from 'firebase/firestore';
+import { getDocs,query ,where} from 'firebase/firestore';
 import { usersRef } from '../../firebaseConfig';
 export default function home() {
     const {user} = useAuth();
@@ -39,7 +39,7 @@ export default function home() {
 
       {
         users.length > 0 ? (
-            <ChatList users = {users} />
+            <ChatList currentUser = {user} users = {users} />
         ):(
     
 

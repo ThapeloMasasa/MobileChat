@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, Keyboard } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useLocalSearchParams, useRouter } from 'expo-router'
@@ -21,6 +21,7 @@ export default function ChatRoom({}) {
     const [messages, setMessages] = useState([]);
     const textRef = useRef('');
     const inputRef = useRef(null);
+    const scrollViewRef = useRef(null);
     
     useEffect(()=>{
         console.log('hello', messages);
@@ -38,7 +39,14 @@ export default function ChatRoom({}) {
             setMessages([...allMessages]);
         });
 
-        return unsub;
+        const KeyBoardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow', updateScrollView
+        )
+
+        return ()=>{
+            unsub();
+            KeyBoardDidShowListener.remove();
+        }
 
     },[])
 
@@ -66,7 +74,16 @@ export default function ChatRoom({}) {
             console.log("Error sending message: ", e.message);
         }
     }
-    
+
+    useEffect(()=>{
+        updateScrollView()
+    },[messages])
+
+    const updateScrollView = ()=>{
+        setTimeout(()=>{
+            scrollViewRef?.current.scrollToEnd({animated:false})
+        }, 100)
+    }
     const createRoomIfNotExists = async()=>{
         try {
             let roomId = getRoomId(user?.uid, item?.userId);
@@ -82,14 +99,14 @@ export default function ChatRoom({}) {
     }
     
   return (
-    <CustomKeyBoardView inchat={true}>
+    <CustomKeyBoardView inChat={true}>
     <View className='flex-1 bg-white'>
       <StatusBar style="dark" />
       <ChatRoomHeader  user={item} router = {router}/>
       <View className='h-3 border-b border-neutral-300'/>
       <View className='flex-1 justify-between bg-neutral-100 overflow-visible'>
         <View className='flex-1'>
-            <MessageList messages={messages} currentUser= {user}/>
+            <MessageList scrollViewRef={scrollViewRef} messages={messages} currentUser= {user}/>
         </View>
         <View style={{marginBottom: hp(2.7)}} className='pt-2'>
             <View className='flex-row justify-between items-center mx-3'>
