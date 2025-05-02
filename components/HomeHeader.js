@@ -17,7 +17,6 @@ import { AntDesign, Feather } from '@expo/vector-icons';
 const ios = Platform.OS == 'ios';
 export default function HomeHeader() {
     const {user, logout} = useAuth();
-    console.log("check User", user)
     const inset= useSafeAreaInsets();
     const handleProfile = ()=>{
 
