@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-
+import { MenuProvider } from 'react-native-popup-menu';
 import { Slot, useRouter,useSegments  } from 'expo-router'
 import "../global.css"
 import { AuthContextProvider, useAuth} from '../context/authContext'
@@ -30,8 +30,10 @@ const MainLayout = ()=>{
 
 export default function RootLayout() {
   return (
+    <MenuProvider>
     <AuthContextProvider >
       <MainLayout/>
     </AuthContextProvider>
+    </MenuProvider>
   )
 }
