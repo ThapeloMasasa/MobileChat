@@ -45,10 +45,13 @@ https://github.com/user-attachments/assets/e76b1852-7bc2-4365-986d-4c3fac97ad4f
 
 ## Installation/ Set up Instructions
 
--- git clone https://github.com/thapelomasasa/mobileChat.git
--- cd MobileChat
--- npm install
--- npx expo start --ios
+- git clone https://github.com/thapelomasasa/mobileChat.git
+
+- cd MobileChat
+
+- npm install
+
+- npx expo start --ios
 
 ## Learn more
 
