@@ -4,19 +4,37 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { useAuth } from '../../context/authContext'
 import { StatusBar } from 'expo-status-bar'
 import ChatList from '../../components/ChatList';
+import { getDocs, query,where} from 'firebase/firestore';
+import { usersRef } from '../../firebaseConfig';
 export default function home() {
     const {user} = useAuth();
-    const [users, setUsers] = useState([1,2,3,4]);
+    const [users, setUsers] = useState([]);
 
     useEffect(()=>{
+        //console.log("Current USer", user);
         if(user?.uid){
-            getUsers()
+           // console.log("    Here")
+            getUsers();
+
+           // console.log('    After')
         }
 
     },[])
 
     const getUsers = async ()=>{
-        //fetch users
+        //console.log("In getUsers");
+        const q = query(usersRef, where('userId', "!=", user?.uid));
+
+        const querySnapShot = await getDocs(q);
+        let data = [];
+        console.log("SnapSHott        ")
+        //console.log(querySnapShot)
+        querySnapShot.forEach(doc=>{
+            data.push(doc.data())
+        })
+        console.log("here are Users", data)
+        setUsers(data)
+
     }
 
   return (

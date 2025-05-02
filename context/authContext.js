@@ -40,7 +40,7 @@ export const AuthContextProvider = ({children})=> {
     const login = async (email, password)=>{
         try{
             const response = await signInWithEmailAndPassword(auth, email, password);
-            console.log( 'your response',response)
+            //console.log( 'your response',response)
             return {success: true};
         }catch(e){
             let msg = e.message;
