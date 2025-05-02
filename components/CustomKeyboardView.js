@@ -10,6 +10,7 @@ export default function CustomKeyBoardView({children}) {
        style={{flex: 1}} >
         <ScrollView 
             style={{flex: 1}}
+            contentContainerStyle={{flex: 1}}
             bounces={false}
             showsVerticalScrollIndicator={false}>
                 {children}
