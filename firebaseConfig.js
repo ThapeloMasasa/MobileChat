@@ -1,17 +1,19 @@
+
 import { initializeApp, getApps } from "firebase/app";
 import { getReactNativePersistence, initializeAuth, getAuth } from "firebase/auth";
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import { getFirestore, collection } from "firebase/firestore";
-
+import Constants from 'expo-constants'; 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAPwh6OlFQTqG2WCDDK5YlPWh9hwCIHRlE",
-  authDomain: "mobile-chat-9b559.firebaseapp.com",
-  projectId: "mobile-chat-9b559",
-  storageBucket: "mobile-chat-9b559.firebasestorage.app",
-  messagingSenderId: "392340888058",
-  appId: "1:392340888058:web:f237647f7fe67d37d66c43",
+  apiKey: Constants.expoConfig?.extra?.FIREBASE_API_KEY,
+  authDomain: Constants.expoConfig?.extra?.FIREBASE_AUTH_DOMAIN,
+  projectId: Constants.expoConfig?.extra?.FIREBASE_PROJECT_ID,
+  storageBucket: Constants.expoConfig?.extra?.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: Constants.expoConfig?.extra?.FIREBASE_MESSAGING_SENDER_ID,
+  appId: Constants.expoConfig?.extra?.FIREBASE_APP_ID,
 };
+
 
 // Initialize Firebase app 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
